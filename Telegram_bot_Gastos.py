@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 import re
 from datetime import date
-
+from telegram.ext.filters import User
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -189,6 +189,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 

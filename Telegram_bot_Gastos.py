@@ -54,11 +54,12 @@ async def add_expense(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("📚 Coimbra", callback_data="cat_coimbra")],
         [InlineKeyboardButton("🍔 Comida", callback_data="cat_comida")],
-        [InlineKeyboardButton("🎮 Gaming", callback_data="cat_gaming")],
+        [InlineKeyboardButton("🚗 Carro", callback_data="cat_moto")],
         [InlineKeyboardButton("🏍️ Moto", callback_data="cat_moto")],
         [InlineKeyboardButton("🛒 Compras", callback_data="cat_compras")],
         [InlineKeyboardButton("🍺 Bebida", callback_data="cat_bebida")],
-        [InlineKeyboardButton("💰 Outros", callback_data="cat_outros")],
+        [InlineKeyboardButton("🎮 Gaming", callback_data="cat_gaming")],
+        [InlineKeyboardButton("💰 Outros", callback_data="cat_outros")]
     ]
     await update.message.reply_text("Escolhe categoria:", reply_markup=InlineKeyboardMarkup(keyboard))
 
@@ -189,6 +190,7 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
 

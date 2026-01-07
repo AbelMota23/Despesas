@@ -19,7 +19,6 @@ from telegram.ext import (
 # --- Config ---
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-MEU_ID = 
 import json
 
 creds_json = os.getenv("GOOGLE_CREDS_JSON")
@@ -179,4 +178,5 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 

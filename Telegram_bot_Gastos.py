@@ -19,7 +19,12 @@ from telegram.ext import (
 # --- Config ---
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+import json
 
+creds_json = os.getenv("GOOGLE_CREDS_JSON")
+if creds_json:
+    with open("credenciais.json", "w", encoding="utf-8") as f:
+        f.write(creds_json)
 SHEET_NAME = "GastosSemanais"  # nome exato da tua planilha
 
 def conectar_google_sheets():
@@ -170,4 +175,5 @@ def main():
     app.run_polling()
 
 if __name__ == "__main__":
+
     main()

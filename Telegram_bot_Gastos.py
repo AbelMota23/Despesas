@@ -19,6 +19,7 @@ from telegram.ext import (
 # --- Config ---
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+MEU_ID = 
 import json
 
 creds_json = os.getenv("GOOGLE_CREDS_JSON")
@@ -37,6 +38,7 @@ def conectar_google_sheets():
 
 # --- Commands ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(update.effective_user.id)
     await update.message.reply_text("👋 Bot de Gastos!\nUsa /add para registar.\nUsa /cancel para cancelar um registo a meio.")
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -177,3 +179,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+

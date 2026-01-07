@@ -19,6 +19,7 @@ from telegram.ext import (
 # --- Config ---
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+MEU_ID = 6356669235
 import json
 
 creds_json = os.getenv("GOOGLE_CREDS_JSON")
@@ -26,6 +27,10 @@ if creds_json:
     with open("credenciais.json", "w", encoding="utf-8") as f:
         f.write(creds_json)
 SHEET_NAME = "GastosSemanais"  # nome exato da tua planilha
+
+def autorizado(update: Update) -> bool:
+    return update.effective_user and update.effective_user.id == MEU_ID
+
 
 def conectar_google_sheets():
     scopes = [
@@ -59,6 +64,9 @@ async def add_expense(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # --- Callback handlers ---
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not autorizado(update):
+        await update.callback_query.answer("Sem permissão.", show_alert=True)
+        return
     query = update.callback_query
     await query.answer()
 
@@ -70,6 +78,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.edit_message_text(f"✅ Categoria: {cat_nome}\nQuanto gastaste? (ex: 3.50 ou 2,50€)")
 
 async def desc_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not autorizado(update):
+        await update.callback_query.answer("Sem permissão.", show_alert=True)
+        return
     """Só trata callbacks desc_..."""
     query = update.callback_query
     await query.answer()
@@ -161,16 +172,16 @@ def main():
 
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("add", add_expense))
-    app.add_handler(CommandHandler("cancel", cancel))
+    app.add_handler(CommandHandler("start", start, filters=User(MEU_ID)))
+    app.add_handler(CommandHandler("add", add_expense, filters=User(MEU_ID)))
+    app.add_handler(CommandHandler("cancel", cancel, filters=User(MEU_ID)))
 
     # MUITO IMPORTANTE: patterns para separar cat_ de desc_
     app.add_handler(CallbackQueryHandler(button_handler, pattern="^cat_"))
     app.add_handler(CallbackQueryHandler(desc_handler, pattern="^desc_"))
 
     # Um único handler de texto para valor/descrição
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_router))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & User(MEU_ID), text_router))
 
     print("🤖 Bot rodando! Usa /start")
     app.run_polling()
@@ -178,5 +189,6 @@ def main():
 if __name__ == "__main__":
 
     main()
+
 
 
